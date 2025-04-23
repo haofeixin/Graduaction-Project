@@ -1,0 +1,48 @@
+market:
+  max_timesteps: 1000
+  mode: partial_agents_per_step  # options: single_agent_per_step, all_agents_per_step
+  activation_ratio: 0.1
+  fundamental_price: 300.0
+  fundamental_volatility: 0.001
+
+agents:
+  count: 100
+  noise_std: 0.01
+  types:
+    retail_ratio: 0.7
+    institutional_ratio: 0.3
+
+  # 全局参考参数
+  reference_tau: 100         # 用于计算个体 tau_i
+  reference_tau_f: 30
+  reference_alpha: 1.0       # 用于计算个体 alpha_i
+
+  # 散户设定
+  retail:
+    fundamental_sigma: 5.0   # σ1
+    chartist_sigma: 2.5      # σ2
+    noise_sigma: 1.0         # σn
+    initial_cash: 2000
+    initial_stock: 10
+
+  # 机构设定
+  institutional:
+    fundamental_sigma: 10.0
+    chartist_sigma: 1.0
+    noise_sigma: 0.5
+    initial_cash: 100000
+    initial_stock: 50
+
+  # 网络暴力/情绪机制参数（暂设为非激活状态）
+  emotion_initial_std: 1.0
+  emotion_weight: 0.0
+  pressure_weight: 0.0
+  suppression_weight: 0.0
+  conformity_weight: 0.0
+
+orderbook:
+  snapshot_interval: 10
+
+simulation:
+  random_seed: 42
+  log_trades: true
