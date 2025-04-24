@@ -1,20 +1,20 @@
 market:
-  max_timesteps: 1000
-  mode: partial_agents_per_step  # options: single_agent_per_step, all_agents_per_step
+  max_timesteps: 20
+  mode: single_agent_per_step  # options: single_agent_per_step, partial_agents_per_step, all_agents_per_step
   activation_ratio: 0.1
   fundamental_price: 300.0
   fundamental_volatility: 0.001
 
 agents:
-  count: 100
+  count: 5
   noise_std: 0.01
   types:
-    retail_ratio: 0.7
-    institutional_ratio: 0.3
+    retail_ratio: 1
+    institutional_ratio: 0
 
   # 全局参考参数
-  reference_tau: 100         # 用于计算个体 tau_i
-  reference_tau_f: 30
+  reference_tau: 3         # 用于计算个体 tau_i
+  
   reference_alpha: 1.0       # 用于计算个体 alpha_i
 
   # 散户设定

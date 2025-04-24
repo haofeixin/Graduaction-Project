@@ -42,8 +42,11 @@ class BaseTrader(ABC):
         return np.random.rand() < prob_trade
 
     def __repr__(self):
-        return super().__repr__()
-    
+        return (f"<Trader {self.trader_id} ({self.type}) | "
+                f"cash={self.cash:.1f}, stock={self.stock}, "
+                f"g1={self.g1:.2f}, g2={self.g2:.2f}, n={self.n:.2f}, "
+                f"alpha={self.alpha:.2f}, tau={self.tau:.2f}>")
+        
     @abstractmethod
     def generate_order(self, timestep: int, market_snapshot: dict) -> Order:
         pass

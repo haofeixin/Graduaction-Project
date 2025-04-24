@@ -10,6 +10,7 @@ class OrderBook:
         self.trade_log = []
 
     def submit_order(self, order: Order):
+        print(f"📥 OrderBook received: {order}")
         if order.order_type == OrderType.MARKET:
             self._match_market_order(order)
         elif order.order_type == OrderType.LIMIT:
@@ -58,7 +59,7 @@ class OrderBook:
                     'trade_price': trade_price, 
                     'trade_qty': trade_qty
                 })
-
+                print(f"💥 TRADE: {order.order_id} <-> {top_order.order_id} at price={trade_price} qty={trade_qty}")
                 remaining_quantity -= trade_qty  # 更新剩余未成交部分的数量
 
 
@@ -67,7 +68,7 @@ class OrderBook:
                     heapq.heappush(book, (self._priority(top_order), top_order.order_id, top_order))
             else:
                 break
-
+        
         # 只有当市价单仍有剩余量时，才将剩余部分转为限价单
         if remaining_quantity > 0:
             limit_order = Order(
@@ -76,7 +77,8 @@ class OrderBook:
                 direction=order.direction,
                 quantity=remaining_quantity,
                 timestep=order.timestep,
-                price=order.price  # 使用市价单的价格作为限价单价格
+                price=order.price,  # 使用市价单的价格作为限价单价格
+                max_wait_time=order.max_wait_time
             )
             self.submit_order(limit_order)
             print(f"Remaining part of the market order converted to limit order at price {order.price}")

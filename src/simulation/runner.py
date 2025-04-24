@@ -3,6 +3,7 @@ from src.traders.retail import RetailTrader
 from src.traders.institutional import InstitutionalTrader
 from src.market.structure import Market
 from src.config.loader import load_config
+
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -29,7 +30,7 @@ def run():
     
     for agent in agents:
         market.register_agent(agent)
-
+    
     market.run()
 
     print(f"Simulation complete. Trade log contains {len(orderbook.trade_log)} trades.")
@@ -37,5 +38,6 @@ def run():
         print(trade)
 
 if __name__ == "__main__":
+    
     run()
 

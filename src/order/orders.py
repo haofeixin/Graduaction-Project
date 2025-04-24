@@ -68,3 +68,12 @@ class Order:
         if self.direction == OrderDirection.SELL:
             return self.price <= best_bid
         return False
+    
+    def __repr__(self):
+        price_str = f"{self.price:.2f}" if self.price is not None else "MKT"
+        return (f"<Order {self.order_id} | trader={self.trader_id} | "
+                f"type={self.order_type.name if self.order_type else 'None'} | "
+                f"dir={self.direction.name} | qty={self.quantity} | "
+                f"price={price_str} | status={self.status.name} | step={self.timestep}>")
+
+        
