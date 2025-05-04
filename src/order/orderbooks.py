@@ -8,7 +8,12 @@ class OrderBook:
         self.buys: List[Tuple[float, int, Order]] = []
         self.sells: List[Tuple[float, int, Order]] = []
         self.trade_log = []
+        self.agents = []
 
+    def set_agents(self, agents):
+        """设置代理列表"""
+        self.agents = agents
+        
     def submit_order(self, order: Order):
         print(f"📥 OrderBook received: {order}")
         if order.order_type == OrderType.MARKET:
@@ -43,7 +48,6 @@ class OrderBook:
             _, _, top_order = heapq.heappop(book)
 
             # 只有当 top_order 的价格符合当前市价单的价格时才成交
-            # 买单，top_order 的卖价 <= 当前买单的买价； 卖单，top_order 的买价 >= 当前卖单的卖价
             if (order.direction == OrderDirection.BUY and top_order.price <= order.price) or \
             (order.direction == OrderDirection.SELL and top_order.price >= order.price):
                 trade_qty = min(remaining_quantity, top_order.quantity)
@@ -52,16 +56,18 @@ class OrderBook:
                 # 执行成交
                 order.execute(trade_price, order.timestep, trade_qty)
                 top_order.execute(trade_price, order.timestep, trade_qty)
-                self.trade_log.append({
-                    'buyer_id': order.order_id if order.direction == OrderDirection.BUY else top_order.order_id, 
-                    'seller_id': top_order.order_id if order.direction == OrderDirection.BUY else order.order_id, 
-                    'trade_timestamp': order.timestep,
-                    'trade_price': trade_price, 
-                    'trade_qty': trade_qty
-                })
-                print(f"💥 TRADE: {order.order_id} <-> {top_order.order_id} at price={trade_price} qty={trade_qty}")
-                remaining_quantity -= trade_qty  # 更新剩余未成交部分的数量
 
+                # 记录成交信息
+                trade_info = {
+                    'buyer_id': order.trader_id if order.direction == OrderDirection.BUY else top_order.trader_id,
+                    'seller_id': top_order.trader_id if order.direction == OrderDirection.BUY else order.trader_id,
+                    'trade_timestamp': order.timestep,
+                    'trade_price': trade_price,
+                    'trade_qty': trade_qty
+                }
+                self.trade_log.append(trade_info)
+                print(f"💥 TRADE: {order.order_id} <-> {top_order.order_id} at price={trade_price} qty={trade_qty}")
+                remaining_quantity -= trade_qty
 
                 # 如果卖单部分成交，说明order成交完全,剩余部分继续在订单簿中
                 if top_order.quantity > 0:
@@ -77,12 +83,11 @@ class OrderBook:
                 direction=order.direction,
                 quantity=remaining_quantity,
                 timestep=order.timestep,
-                price=order.price,  # 使用市价单的价格作为限价单价格
+                price=order.price,
                 max_wait_time=order.max_wait_time
             )
             self.submit_order(limit_order)
             print(f"Remaining part of the market order converted to limit order at price {order.price}")
-
 
     def _priority(self, order: Order) -> float:
         if order.price is None:
@@ -133,4 +138,8 @@ class OrderBook:
             if order.check_timeout(current_timestamp):  # 使用时间步来检查超时
                 self.sells.remove(entry)  # 从卖单簿中移除超时订单
                 print(f"Order {order.order_id} has been cancelled due to timeout.")
+
+    def get_latest_trades(self) -> list:
+        """获取最新的成交信息"""
+        return self.trade_log[-1:] if self.trade_log else []
         

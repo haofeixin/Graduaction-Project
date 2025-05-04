@@ -1,10 +1,11 @@
 from src.order.orders import Order
 from src.order.orderbooks import OrderBook
+from src.social.cyberbullying import CyberbullyingModel
 import random
 import numpy as np
-
+from typing import Optional
 class Market:
-    def __init__(self, orderbook: OrderBook, max_timesteps: int, config: dict):
+    def __init__(self, orderbook: OrderBook, max_timesteps: int, config: dict, cyberbullying_model: Optional[CyberbullyingModel] = None):
         self.orderbook = orderbook
         self.max_timesteps = max_timesteps
         self.config = config
@@ -14,10 +15,13 @@ class Market:
         self.price_history = []
         self.log_returns = []
         self.fundamental_price = config["market"].get("fundamental_price", 300.0)
+        self.fundamental_price_history = [self.fundamental_price]  # 记录基础价格历史
         self.sigma_f = config["market"].get("fundamental_volatility", 0.001)
+        self.cyberbullying_model = cyberbullying_model
 
     def register_agent(self, agent):
         self.agents.append(agent)
+        
 
     def step(self):
         self.orderbook.current_timestep = self.current_time
@@ -30,10 +34,15 @@ class Market:
         print(f"  - Fundamental: {self.fundamental_price:.2f}")
 
         Z = np.random.normal(0, 1)
-        # 股票基础价格遵循几何布朗运动
-        self.fundamental_price *= np.exp(-0.5 * self.sigma_f ** 2 + self.sigma_f * Z)
+        # 股票基础价格遵循带正漂移项的几何布朗运动
+        mu = self.config["market"].get("fundamental_drift", 0.0001)
+        self.fundamental_price *= np.exp((mu - 0.5 * self.sigma_f ** 2) + self.sigma_f * Z)
+        self.fundamental_price_history.append(self.fundamental_price)  # 记录新的基础价格
 
-        
+        if self.cyberbullying_model:
+            self.cyberbullying_model.propagate()
+            
+            
 
         if not self.agents:
             return
@@ -67,13 +76,51 @@ class Market:
         order = agent.generate_order(self.current_time, market_snapshot)
         if order:
             print(f"✅ Agent {agent.trader_id} submits order: {order}")
+            # 记录当前成交日志长度
+            trade_log_length_before = len(self.orderbook.trade_log)
+            # 提交订单
             self.orderbook.submit_order(order)
+            # 检查是否有新的成交
+            if len(self.orderbook.trade_log) > trade_log_length_before:
+                # 只处理新产生的成交
+                new_trades = self.orderbook.trade_log[trade_log_length_before:]
+                self._process_trades(new_trades)
         else:
             print(f"❌ Agent {agent.trader_id} chose not to trade.")
 
+    def _process_trades(self, trades):
+        """处理成交信息并更新交易者资产"""
+        for trade in trades:
+            buyer = next((t for t in self.agents if t.trader_id == trade['buyer_id']), None)
+            seller = next((t for t in self.agents if t.trader_id == trade['seller_id']), None)
+            
+            if buyer and seller:
+                # 更新买家资产
+                buyer.cash -= trade['trade_qty'] * trade['trade_price']
+                buyer.stock += trade['trade_qty']
+                # 强制非负
+                buyer.cash = max(buyer.cash, 0)
+                buyer.stock = max(buyer.stock, 0)
+                
+                # 更新卖家资产
+                seller.cash += trade['trade_qty'] * trade['trade_price']
+                seller.stock -= trade['trade_qty']
+                # 强制非负
+                seller.cash = max(seller.cash, 0)
+                seller.stock = max(seller.stock, 0)
+                
+                print(f"💰 Asset update after trade:")
+                print(f"  - Buyer {buyer.trader_id}: cash={buyer.cash:.2f}, stock={buyer.stock:.2f}")
+                print(f"  - Seller {seller.trader_id}: cash={seller.cash:.2f}, stock={seller.stock:.2f}")
+
+    
+
     def run(self):
+        
         for _ in range(self.max_timesteps):
             self.step()
+            
+
 
     def _build_market_snapshot(self) -> dict:
         if self.price_history:

@@ -1,45 +1,73 @@
 market:
-  max_timesteps: 20
+  max_timesteps: 10000
   mode: single_agent_per_step  # options: single_agent_per_step, partial_agents_per_step, all_agents_per_step
   activation_ratio: 0.1
   fundamental_price: 300.0
   fundamental_volatility: 0.001
+  fundamental_drift: 0.00005
 
 agents:
-  count: 5
+  fundamental_price: 300.0
+  count: 100
   noise_std: 0.01
   types:
-    retail_ratio: 1
-    institutional_ratio: 0
+    retail_ratio: 0.9
+  
 
   # 全局参考参数
-  reference_tau: 3         # 用于计算个体 tau_i
+  reference_tau_f: 100         # 用于计算个体 tau_i
   
-  reference_alpha: 1.0       # 用于计算个体 alpha_i
 
   # 散户设定
   retail:
     fundamental_sigma: 5.0   # σ1
-    chartist_sigma: 2.5      # σ2
-    noise_sigma: 1.0         # σn
-    initial_cash: 2000
-    initial_stock: 10
+    chartist_sigma: 1.0      # σ2
+    noise_sigma: 1.0        # σn
+    initial_stock_max: 100
+    bully_noise_amplify: 1.5
 
   # 机构设定
   institutional:
-    fundamental_sigma: 10.0
-    chartist_sigma: 1.0
+    fundamental_sigma: 20.0
+    chartist_sigma: 0.5
     noise_sigma: 0.5
-    initial_cash: 100000
-    initial_stock: 50
+    initial_stock_max: 5000
 
-  # 网络暴力/情绪机制参数（暂设为非激活状态）
-  emotion_initial_std: 1.0
-  emotion_weight: 0.0
-  pressure_weight: 0.0
-  suppression_weight: 0.0
-  conformity_weight: 0.0
+  # 网络暴力/情绪机制参数
+  emotion_initial_bias: 0.03         # 情绪偏差初始化标准差
+  emotion_weight_sigma: 0.5          # 情绪权重的波动性
 
+
+social:
+  # 网络暴力机制参数
+  enable_cyberbullying: true         # 控制是否启用网络暴力机制
+  bully_threshold: 3                 # 被攻击超过几次视为被网暴
+  bullying_bias_threshold: -0.3      # bias 低于此值的 trader 可视为攻击者
+  suppression_prob: 0.5              # 被网暴后沉默概率
+  network_type: small_world          # small_world / random
+  average_degree: 4                  # 平均邻居数
+
+  born_bully_ratio: 0.1              # 初始喷子比例
+  exposure_threshold: 0.1              # 曝光累积超过此值才视为被网暴
+  recovery_rate: 0.1                 # 每轮恢复压力的速度
+  cooldown_duration: 5               # 喷子攻击后冷却时间
+  resilience_growth: 0.1            # 被攻击后心理韧性的增长速度
+  emotion_shrink_factor: 0.95        # 被网暴后情绪极端性减弱因子
+  recovery_shrink_factor: 0.95       # 被网暴后恢复的衰减因子
+
+  # 正反馈：网暴感染
+  enable_bully_infect: true          # 是否允许网暴感染
+  bully_infect_prob: 0.05            # 被喷后变喷子的概率
+
+  # 负反馈：监管与举报
+  enable_regulator: false             # 是否启用监管者
+  regulator_interval: 10             # 监管者巡视周期（时间步）
+  regulator_cooldown: 10             # 监管惩罚的冷却时间
+  enable_bully_report: false          # 是否允许被喷者举报
+  regulator_report_prob: 0.1         # 举报成功概率
+  regulator_report_cooldown: 8       # 举报惩罚的冷却时间
+  enable_bully_resilience: true      # 是否允许心理承受能力提升
+  
 orderbook:
   snapshot_interval: 10
 
