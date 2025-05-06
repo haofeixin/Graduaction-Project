@@ -40,9 +40,6 @@ class RetailTrader(BaseTrader):
         # 计算价格偏离程度
         price_deviation = (expected_price - p_t) / p_t
 
-        
-        
-
         # 决定交易方向
         if abs(price_deviation) < 0.0005:  # 如果价格偏离小于0.05%，不交易
             print(f"❌ Agent {self.trader_id} chose not to trade: Price deviation too small")
@@ -50,47 +47,40 @@ class RetailTrader(BaseTrader):
 
         direction = OrderDirection.BUY if price_deviation > 0 else OrderDirection.SELL
 
-        # 计算交易数量
-        # 数量与价格偏离程度和风险偏好相关
-        if direction == OrderDirection.BUY:
-            base_quantity = int(self.cash  * 0.2 / p_t )  # 买：按现金的 20% 推出买量
-        else:
-            base_quantity = int(self.stock * 0.2)        # 卖：当前持仓的 20%
-            
-        risk_adjusted_quantity = int(base_quantity * (1 + abs(price_deviation) * 2))
-        # 若被网暴，交易更极端（风险控制下降）
-        if self.is_bullied:
-            risk_adjusted_quantity = int(risk_adjusted_quantity * 1.2)
-        quantity = min(risk_adjusted_quantity, int(self.cash / p_t))  # 确保不超过可用资金
-
-        if quantity < 1:  # 如果计算出的数量小于1，不交易
-            print(f"❌ Agent {self.trader_id} chose not to trade: Calculated quantity too small")
-            return None
-
-        # 决定订单类型和价格
+        # 决定订单类型和价格（先定价）
         order_type = OrderType.LIMIT
         price = None
-
         if direction == OrderDirection.BUY:
             if best_ask is not None and best_ask <= expected_price:
-                # 如果最优卖价低于预期价格，使用市价单
                 order_type = OrderType.MARKET
                 price = best_ask
             else:
-                # 否则使用限价单，价格略低于预期价格
                 price = expected_price * (1 - abs(price_deviation) * 0.5)
-        else:  # SELL
+        else:
             if best_bid is not None and best_bid >= expected_price:
-                # 如果最优买价高于预期价格，使用市价单
                 order_type = OrderType.MARKET
                 price = best_bid
             else:
-                # 否则使用限价单，价格略高于预期价格
                 price = expected_price * (1 + abs(price_deviation) * 0.5)
-
-        # 确保价格合理
-        price = max(0.01, min(price, expected_price * 2))
+        # 价格锚定：限制在p_t的±10%区间
+        lower_bound = p_t * 0.9
+        upper_bound = p_t * 1.1
+        price = min(max(price, lower_bound), upper_bound)
         price = round(price, 2)
+
+        # 再根据锚定后的价格与p_t的偏离决定交易量
+        price_diff = abs(price - p_t) / p_t
+        if direction == OrderDirection.BUY:
+            base_quantity = int(self.cash * 0.2 / p_t)
+        else:
+            base_quantity = int(self.stock * 0.2)
+        risk_adjusted_quantity = int(base_quantity * (1 + price_diff * 2))
+        if self.is_bullied:
+            risk_adjusted_quantity = int(risk_adjusted_quantity * 1.2)
+        quantity = min(risk_adjusted_quantity, int(self.cash / p_t))
+        if quantity < 1:
+            print(f"❌ Agent {self.trader_id} chose not to trade: Calculated quantity too small")
+            return None
 
         # 打印决策过程
         # print(f"\n🎯 {self.type} Agent {self.trader_id} decision process:")

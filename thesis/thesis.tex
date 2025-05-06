@@ -1,3 +1,4 @@
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % njuthesis 示例模板 v1.4.2 2024-11-08
 % https://github.com/nju-lug/NJUThesis
@@ -28,11 +29,11 @@
 \documentclass[
     % 模板选项(注意右端逗号)：
     %
-    % type = bachelor|master|doctor|postdoc, % 文档类型，默认为本科生
+    type = bachelor, % 文档类型，默认为本科生
     % degree = academic|professional,        % 学位类型，默认为学术型
     %
     % nl-cover,   % 是否需要国家图书馆封面，默认关闭
-    % decl-page,  % 是否需要诚信承诺书或原创性声明，默认关闭
+    decl-page,  % 是否需要诚信承诺书或原创性声明，默认关闭
     %
     %   页面模式，详见手册说明
     % draft,                  % 开启草稿模式
@@ -40,7 +41,7 @@
     % minimal,                % 开启最小化模式
     %
     %   单双面模式，默认为适合印刷的双面模式
-    % oneside,                % 单面模式，无空白页
+    oneside,                % 单面模式，无空白页
     % twoside,                % 双面模式，每一章从奇数页开始
     %
     %   字体设置，不填写则自动调用系统预装字体，详见手册
@@ -52,7 +53,7 @@
 \input{njuthesis-setup.def}
 
 % 自行载入所需宏包
-% \usepackage{subcaption} % 嵌套小幅图像，比 subfig 和 subfigure 更新更好
+\usepackage{subcaption} % 嵌套小幅图像，比 subfig 和 subfigure 更新更好
 % \usepackage{siunitx} % 标准单位符号
 % \usepackage{physics} % 物理百宝箱
 % \usepackage[version=4]{mhchem} % 绘制分子式
@@ -114,12 +115,12 @@
 %   \include{chapters/introduction}
 %   \include{chapters/environments}
 
-\chapter{引言}
 
-\section{量子计算}
-
-John Preskill 认为我们现在处于“含噪声的中型量子时代”。\cite{preskill2018}
-量子位的不稳定性和有限的量子比特数量限制了量子计算机的复杂度和纠错能力。
+\include{chapters/chap1_introduction}
+\include{chapters/chap2_research_review}
+\include{chapters/chap3_model}
+\include{chapters/chap4_simulation}
+\include{chapters/chap5_conclusion}
 
 %---------------------------------------------------------------------
 %	参考文献
@@ -140,7 +141,7 @@ John Preskill 认为我们现在处于“含噪声的中型量子时代”。\ci
 %	学术简历
 %---------------------------------------------------------------------
 
-% 详见手册中“成果列表”一节
+% 详见手册中"成果列表"一节
 % \njuchapter{学术成果}
 % \njupaperlist[攻读博士学位期间发表的学术论文]{preskill2018}
 

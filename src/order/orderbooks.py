@@ -1,5 +1,5 @@
 import heapq
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Dict
 from .orders import Order, OrderType, OrderDirection, OrderStatus
 
 
@@ -9,6 +9,7 @@ class OrderBook:
         self.sells: List[Tuple[float, int, Order]] = []
         self.trade_log = []
         self.agents = []
+        self.current_timestep = 0
 
     def set_agents(self, agents):
         """设置代理列表"""
@@ -142,4 +143,69 @@ class OrderBook:
     def get_latest_trades(self) -> list:
         """获取最新的成交信息"""
         return self.trade_log[-1:] if self.trade_log else []
+
+    def get_market_depth(self, levels: int = 5) -> Dict[str, Dict[float, int]]:
+        """
+        获取市场深度
+        
+        Args:
+            levels: 获取的深度级别数量（默认5级）
+            
+        Returns:
+            Dict包含买盘和卖盘的深度信息，格式为：
+            {
+                'bids': {price: volume, ...},
+                'asks': {price: volume, ...}
+            }
+        """
+        # 获取买盘深度（注意：buys中的价格是负的，需要转换回正值）
+        bids = {}
+        # 对买单按价格从高到低排序（因为buys中存储的是负价格，所以直接排序即可）
+        sorted_buys = sorted(self.buys, key=lambda x: x[0])
+        for price, _, order in sorted_buys[:levels]:
+            if order.status == OrderStatus.PENDING and order.quantity > 0:
+                actual_price = -price  # 转换回实际价格
+                bids[actual_price] = bids.get(actual_price, 0) + order.quantity
+        
+        # 获取卖盘深度（sells中的价格已经是正值）
+        asks = {}
+        # 对卖单按价格从低到高排序
+        sorted_sells = sorted(self.sells, key=lambda x: x[0])
+        for price, _, order in sorted_sells[:levels]:
+            if order.status == OrderStatus.PENDING and order.quantity > 0:
+                asks[price] = asks.get(price, 0) + order.quantity
+        
+        return {'bids': bids, 'asks': asks}
+
+    def get_total_depth(self, levels: int = 5) -> Dict[str, int]:
+        """
+        获取总市场深度
+        
+        Args:
+            levels: 获取的深度级别数量（默认5级）
+            
+        Returns:
+            Dict包含买盘和卖盘的总深度
+        """
+        depth = self.get_market_depth(levels)
+        return {
+            'bid_depth': sum(depth['bids'].values()),
+            'ask_depth': sum(depth['asks'].values())
+        }
+
+    def get_bid_volume(self, price: float) -> int:
+        """获取指定价格的买单总量"""
+        volume = 0
+        for _, _, order in self.buys:
+            if order.status == OrderStatus.PENDING and order.quantity > 0 and -order.price == price:
+                volume += order.quantity
+        return volume
+
+    def get_ask_volume(self, price: float) -> int:
+        """获取指定价格的卖单总量"""
+        volume = 0
+        for _, _, order in self.sells:
+            if order.status == OrderStatus.PENDING and order.quantity > 0 and order.price == price:
+                volume += order.quantity
+        return volume
         

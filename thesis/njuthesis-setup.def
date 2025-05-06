@@ -11,59 +11,59 @@
 % info 类用于录入个人信息
 %   带*号的为对应英文字段
 \njusetup[info]{
-    title = {第一行标题\\第二行标题\\第三行标题},
+    title = {社交媒体平台网络暴力会伤损害股票市场投资者的获得感吗},
     % 中文题目
     % 直接填写标题就是自动换行
     % 可以使用换行控制符(\\)手动指定换行位置
     %
-    title* = {My Title in English},
+    title* = {Can Cyberbulling in social media hurt investors's wealth in stock market},
     % 英文题目
     %
-    author = {姓名},
+    author = {辛昊飞},
     % 作者姓名
     %
-    author* = {Ming Xing},
+    author* = {Xin HaoFei},
     % 作者英文姓名
     % 一般使用拼音
     %
-    keywords = {我,就是,充数的,关键词},
+    keywords = {网络暴力, 行为金融, 人工股票市场, 市场微观结构},
     % 中文关键词列表
     % 使用英文半角逗号(,)分隔
     %
-    keywords* = {Dummy,Keywords,Here,{It Is}},
+    keywords* = {Cyberbulling, Behaviour Finance, ABM, Market Microstructure},
     % 英文关键词
     % 使用英文半角逗号(,)分隔
     %
-    grade = {2018},
+    grade = {2021},
     % 年级
     %
-    student-id = {181850195},
+    student-id = {211275016},
     % 学号或工号
     % 研究生请斟酌大小写字母格式
     % 本模板并不会自动更正大小写
     %
-    department = {化学化工学院},
-    department* = {School of Chemistry and Chemical Engineering},
+    department = {工程管理学院},
+    department* = {School of Management and Engineering},
     % 院系
     %
-    major = {化学},
-    major* = {Chemistry},
+    major = {金融工程(计算机金融工程实验班)},
+    major* = {Financial Engineering},
     % 专业
     %
     % major = {封面专业,摘要专业},
     % 研究生专业型学位可能遇到两处内容不一致的情况
     %
-    supervisor = {导师姓名,教授},
-    supervisor*= {Professor My Supervisor},
+    supervisor = {李心丹,教授},
+    supervisor*= {Li XinDan, Professor},
     % 导师全称
     % 使用英文半角逗号(,)分隔中文姓名和职称
     %
-    % supervisor-ii = {第二导师姓名,副教授},
-    % supervisor-ii* = {Associate professor My Second Supervisor},
+    supervisor-ii = {孙旭初, 助理研究员},
+    supervisor-ii* = {Sun Xuchu, Researcher},
     % 第二导师全称
     % 如果确实没有第二导师，不填写即可
     %
-    submit-date = {2022-05-20},
+    submit-date = {2025-05-20},
     % 提交日期
     % 格式为 yyyy-mm-dd
     % 不填就是编译当天日期
@@ -131,7 +131,7 @@
     % 默认为顺序编码制（numeric）
     % 可选著者-出版年制（author-year）
     %
-    resource = {njuthesis-sample.bib},
+    resource = {references.bib},
     % 参考文献数据源
     % 需要带扩展名的完整文件名
     % 可使用逗号分隔多个文件
@@ -158,14 +158,14 @@
     % path = {{./figure/}{./image/}},
     % 图片搜索路径
     %
-    nju-emblem = {nju-emblem},
+    % nju-emblem = {nju-emblem},
     nju-name = {nju-name},
     % 校徽和校名图片路径
     % 建议使用 PDF 格式的矢量图
     % 使用外置图片有助于减少编译时间
     % 空置时会自动使用 njuvisual 宏包绘制
     %
-    % nju-emblem = {nju-emblem-purple},
+    nju-emblem = {nju-emblem-purple},
     % nju-name = {nju-name-purple},
     % 替换为紫色版本
     % 这个选项只能填写一次

@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from src.traders.base import BaseTrader
 from scipy.interpolate import make_interp_spline
 
@@ -12,10 +12,30 @@ class WealthAnalyzer:
         self.traders = traders
         self.fundamental_price = fundamental_price
         self.initial_wealth = self._calculate_total_wealth()
+    
+    def _calculate_trader_wealth(self, trader: BaseTrader, price: float) -> float:
+        """计算单个交易者的财富"""
+        return trader.cash + trader.stock * price
+    
+    def _calculate_wealths(self, traders: List[BaseTrader], price: float) -> List[float]:
+        """计算一组交易者的财富列表"""
+        return [self._calculate_trader_wealth(trader, price) for trader in traders]
         
     def _calculate_total_wealth(self) -> float:
         """计算市场总财富"""
-        return sum(trader.cash + trader.stock * self.fundamental_price for trader in self.traders)
+        return sum(self._calculate_wealths(self.traders, self.fundamental_price))
+    
+    def _calculate_gini(self, wealths: List[float]) -> float:
+        """计算基尼系数"""
+        if not wealths:
+            return 0.0
+        sorted_wealths = np.sort(wealths)
+        n = len(wealths)
+        total_wealth = np.sum(sorted_wealths)
+        if total_wealth == 0:
+            return 0.0
+        index = np.arange(1, n + 1)
+        return ((2 * index - n - 1) * sorted_wealths).sum() / (n * total_wealth)
     
     def show_wealth_distribution(self, title: str = "Wealth Distribution"):
         """展示财富分布"""
@@ -26,29 +46,24 @@ class WealthAnalyzer:
         
         total_wealth = self._calculate_total_wealth()
         for trader in self.traders:
-            wealth = trader.cash + trader.stock * self.fundamental_price
+            wealth = self._calculate_trader_wealth(trader, self.fundamental_price)
             wealth_share = (wealth / total_wealth) * 100
             print(f"{trader.trader_id:<10} {trader.type:<15} {trader.cash:<15.2f} {trader.stock:<15.2f} {wealth:<15.2f} {wealth_share:<15.2f}")
         print("=" * 50)
         
     def plot_wealth_distribution(self, save_path: str = None):
         """绘制财富分布直方图"""
-        wealths = [trader.cash + trader.stock * self.fundamental_price for trader in self.traders]
+        wealths = self._calculate_wealths(self.traders, self.fundamental_price)
         total_traders = len(self.traders)
         
         plt.figure(figsize=(10, 6))
-        
-        # 使用Sturges规则计算bin数量: k = 1 + log2(n)
         n_bins = int(1 + np.log2(total_traders))
-        
-        # 创建直方图，density=True使得纵轴显示密度（占比）
         plt.hist(wealths, bins=n_bins, density=True, alpha=0.7, color='blue', edgecolor='black')
         plt.title('Wealth Distribution Among Traders')
         plt.xlabel('Total Wealth')
         plt.ylabel('Proportion of Traders')
         plt.grid(True, alpha=0.3)
         
-        # 添加均值和中位数的垂直线
         mean_wealth = np.mean(wealths)
         median_wealth = np.median(wealths)
         plt.axvline(mean_wealth, color='red', linestyle='--', label=f'Mean: {mean_wealth:.2f}')
@@ -61,18 +76,15 @@ class WealthAnalyzer:
         
     def calculate_wealth_inequality(self) -> Dict[str, float]:
         """计算财富不平等指标"""
-        wealths = [trader.cash + trader.stock * self.fundamental_price for trader in self.traders]
+        wealths = self._calculate_wealths(self.traders, self.fundamental_price)
         total_wealth = sum(wealths)
         
-        # 计算基尼系数
-        sorted_wealths = np.sort(wealths)
-        n = len(wealths)
-        index = np.arange(1, n + 1)
-        gini = ((2 * index - n - 1) * sorted_wealths).sum() / (n * total_wealth)
+        gini = self._calculate_gini(wealths)
         
         # 计算财富集中度（前20%交易者拥有的财富比例）
+        n = len(wealths)
         top_20_percent = int(n * 0.2)
-        top_wealth = sum(sorted_wealths[-top_20_percent:])
+        top_wealth = sum(sorted(wealths)[-top_20_percent:])
         wealth_concentration = top_wealth / total_wealth
         
         return {
@@ -80,15 +92,8 @@ class WealthAnalyzer:
             'wealth_concentration': wealth_concentration
         }
 
-    def plot_analysis(self, initial_traders, final_traders, initial_price, final_price, save_prefix: str = "results/wealth/"):
-        """
-        分别绘制散户和机构的初始/最终财富分布对比图（仅直方图，标注均值和中位数）。
-        :param initial_traders: 初始traders列表
-        :param final_traders: 最终traders列表
-        :param initial_price: 初始市场价格
-        :param final_price: 最终市场价格
-        :param save_prefix: 保存路径前缀
-        """
+    def plot_analysis(self, initial_traders, final_traders, initial_price, final_price, save_path: str = "wealth_compare"):
+        """分别绘制散户和机构的初始/最终财富分布对比图"""
         def plot_distribution(ax, wealths, color, label, bins=30):
             if len(wealths) == 0:
                 return
@@ -98,13 +103,9 @@ class WealthAnalyzer:
             total = sum(counts)
             centers = (bin_edges[:-1] + bin_edges[1:]) / 2
             proportions = counts / total if total > 0 else np.zeros_like(counts)
-            # 只画直方图
             ax.bar(centers, proportions, width=(bin_edges[1]-bin_edges[0])*0.9, color=color, alpha=0.6, label=label)
-            # 标注均值和中位数
             mean = np.mean(wealths)
-            
             ax.axvline(mean, color='red', linestyle='--', linewidth=2, label='Mean')
-            
             ax.set_xlabel("Wealth")
             ax.set_ylabel("Proportion")
             ax.grid(True, alpha=0.3)
@@ -113,8 +114,8 @@ class WealthAnalyzer:
         # 散户
         initial_retail = [t for t in initial_traders if t.type == 'retail']
         final_retail = [t for t in final_traders if t.type == 'retail']
-        initial_retail_wealth = [t.cash + t.stock * initial_price for t in initial_retail]
-        final_retail_wealth = [t.cash + t.stock * final_price for t in final_retail]
+        initial_retail_wealth = self._calculate_wealths(initial_retail, initial_price)
+        final_retail_wealth = self._calculate_wealths(final_retail, final_price)
 
         plt.figure(figsize=(12, 5))
         ax1 = plt.subplot(1, 2, 1)
@@ -124,14 +125,14 @@ class WealthAnalyzer:
         plot_distribution(ax2, final_retail_wealth, color='green', label='Final')
         plt.title("Retail Traders Final Wealth Distribution")
         plt.tight_layout()
-        plt.savefig(f"{save_prefix}retail_wealth_compare.png")
+        plt.savefig(f"{save_path}_retail.png")
         plt.close()
 
         # 机构
         initial_inst = [t for t in initial_traders if t.type == 'institutional']
         final_inst = [t for t in final_traders if t.type == 'institutional']
-        initial_inst_wealth = [t.cash + t.stock * initial_price for t in initial_inst]
-        final_inst_wealth = [t.cash + t.stock * final_price for t in final_inst]
+        initial_inst_wealth = self._calculate_wealths(initial_inst, initial_price)
+        final_inst_wealth = self._calculate_wealths(final_inst, final_price)
 
         plt.figure(figsize=(12, 5))
         ax1 = plt.subplot(1, 2, 1)
@@ -141,17 +142,16 @@ class WealthAnalyzer:
         plot_distribution(ax2, final_inst_wealth, color='orange', label='Final')
         plt.title("Institutional Traders Final Wealth Distribution")
         plt.tight_layout()
-        plt.savefig(f"{save_prefix}institutional_wealth_compare.png")
+        plt.savefig(f"{save_path}_institutional.png")
         plt.close()
 
     def generate_report(self) -> str:
         """只输出散户和机构的财富统计"""
-        # 分离散户和机构
         retail_traders = [t for t in self.traders if t.type == 'retail']
         institutional_traders = [t for t in self.traders if t.type == 'institutional']
         
-        retail_wealths = [t.cash + t.stock * self.fundamental_price for t in retail_traders]
-        institutional_wealths = [t.cash + t.stock * self.fundamental_price for t in institutional_traders]
+        retail_wealths = self._calculate_wealths(retail_traders, self.fundamental_price)
+        institutional_wealths = self._calculate_wealths(institutional_traders, self.fundamental_price)
         
         report = f"""
 Wealth Analysis Report
@@ -176,30 +176,19 @@ Wealth Analysis Report
         return report 
 
     def get_summary(self, initial_agents, final_agents, initial_price, final_price):
-        def calc_wealth(agents, price):
-            return [t.cash + t.stock * price for t in agents]
-        def calc_gini(wealths):
-            sorted_wealths = np.sort(wealths)
-            n = len(wealths)
-            total_wealth = np.sum(sorted_wealths)
-            if total_wealth == 0 or n == 0:
-                return 0.0
-            index = np.arange(1, n + 1)
-            gini = ((2 * index - n - 1) * sorted_wealths).sum() / (n * total_wealth)
-            return gini
-
+        """获取财富变化摘要"""
         initial_retail = [t for t in initial_agents if t.type == 'retail']
         final_retail = [t for t in final_agents if t.type == 'retail']
         initial_inst = [t for t in initial_agents if t.type == 'institutional']
         final_inst = [t for t in final_agents if t.type == 'institutional']
 
-        initial_retail_wealth = calc_wealth(initial_retail, initial_price)
-        final_retail_wealth = calc_wealth(final_retail, final_price)
-        initial_inst_wealth = calc_wealth(initial_inst, initial_price)
-        final_inst_wealth = calc_wealth(final_inst, final_price)
+        initial_retail_wealth = self._calculate_wealths(initial_retail, initial_price)
+        final_retail_wealth = self._calculate_wealths(final_retail, final_price)
+        initial_inst_wealth = self._calculate_wealths(initial_inst, initial_price)
+        final_inst_wealth = self._calculate_wealths(final_inst, final_price)
 
-        initial_gini = calc_gini(initial_retail_wealth + initial_inst_wealth)
-        final_gini = calc_gini(final_retail_wealth + final_inst_wealth)
+        initial_gini = self._calculate_gini(initial_retail_wealth + initial_inst_wealth)
+        final_gini = self._calculate_gini(final_retail_wealth + final_inst_wealth)
 
         return {
             'initial_retail_mean': np.mean(initial_retail_wealth),
