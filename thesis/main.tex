@@ -1,0 +1,21 @@
+\documentclass[12pt,a4paper]{article}
+
+% 添加 natbib 包
+\usepackage[numbers,sort&compress]{natbib}
+% 设置中文引用样式
+\renewcommand{\citestyle}{authoryear}
+\renewcommand{\citeyear}[1]{(\citeyear{#1})}
+\renewcommand{\citeauthor}[1]{\citeauthor{#1}}
+
+% 添加中文引用格式
+\renewcommand{\cite}[1]{\citeauthor{#1}\citeyear{#1}}
+\renewcommand{\citep}[1]{(\citeauthor{#1}, \citeyear{#1})}
+\renewcommand{\citet}[1]{\citeauthor{#1}(\citeyear{#1})}
+
+\begin{document}
+
+% 在文档末尾添加参考文献
+\bibliographystyle{plainnat}  % 使用 plainnat 样式
+\bibliography{references}
+
+\end{document} 

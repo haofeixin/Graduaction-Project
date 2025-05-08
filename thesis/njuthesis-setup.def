@@ -126,7 +126,7 @@
 
 % bib 类用于参考文献设置
 \njusetup[bib]{
-    % style = numeric|author-year,
+    style = numeric,
     % 参考文献样式
     % 默认为顺序编码制（numeric）
     % 可选著者-出版年制（author-year）
@@ -137,19 +137,18 @@
     % 可使用逗号分隔多个文件
     % 此条等效于 \addbibresource 命令
     %
-    % option = {
-        % doi    = false,
-        % isbn   = false,
-        % url    = false,
-        % eprint = false,
-        % 关闭部分无用文献信息
-        %
+    option = {
+        gbnamefmt = lowercase,
+        % 使用仅首字母大写的姓名
         % refsection = chapter,
         % 将参考文献表置于每章后
-        %
-        % gbnamefmt = lowercase
-        % 使用仅首字母大写的姓名
-    %   }
+        sorting = nyt,
+        % 按姓名、年份、标题排序
+        labelnumber = true,
+        % 启用编号
+        defernumbers = true
+        % 延迟编号，确保编号连续
+    }
     % 额外的 biblatex 宏包选项
 }
 
