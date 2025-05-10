@@ -135,6 +135,97 @@
       \field{dateera}{ce}
       \keyw{bohorquez2024social}
     \endentry
+    \entry{chiarella2009}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=f6de26dbddf23b8c4da7257fe7ef4323}{%
+           family={Chiarella},
+           familyi={C\bibinitperiod},
+           given={Carl},
+           giveni={C\bibinitperiod}}}%
+        {{hash=cf313e1f287717a8da3b516871b9cb39}{%
+           family={Dieci},
+           familyi={D\bibinitperiod},
+           given={Roberto},
+           giveni={R\bibinitperiod}}}%
+        {{hash=6b85ebedebca96bd3ca202fc45b5e3a1}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Xue-Zhong},
+           giveni={X\bibinithyphendelim Z\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=4e08d4ffd13cb4367dc41d5adfd89415}{%
+           family={Hens},
+           familyi={H\bibinitperiod},
+           given={Thorsten},
+           giveni={T\bibinitperiod}}}%
+        {{hash=fb4865c3ec5df4ff33ade538ead5f758}{%
+           family={Schenk-Hoppe},
+           familyi={S\bibinithyphendelim H\bibinitperiod},
+           given={Klaus\bibnamedelima Reiner},
+           giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \name{namea}{3}{}{%
+        {{hash=f6de26dbddf23b8c4da7257fe7ef4323}{%
+           family={Chiarella},
+           familyi={C\bibinitperiod},
+           given={Carl},
+           giveni={C\bibinitperiod}}}%
+        {{hash=cf313e1f287717a8da3b516871b9cb39}{%
+           family={Dieci},
+           familyi={D\bibinitperiod},
+           given={Roberto},
+           giveni={R\bibinitperiod}}}%
+        {{hash=6b85ebedebca96bd3ca202fc45b5e3a1}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Xue-Zhong},
+           giveni={X\bibinithyphendelim Z\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {North-Holland}%
+      }
+      \strng{namehash}{7ac61ba1854a9de61f56dbdcbf0a88bd}
+      \strng{fullhash}{010062739b88353dbaa1854f1fc572b7}
+      \strng{fullhashraw}{010062739b88353dbaa1854f1fc572b7}
+      \strng{bibnamehash}{010062739b88353dbaa1854f1fc572b7}
+      \strng{authorbibnamehash}{010062739b88353dbaa1854f1fc572b7}
+      \strng{authornamehash}{7ac61ba1854a9de61f56dbdcbf0a88bd}
+      \strng{authorfullhash}{010062739b88353dbaa1854f1fc572b7}
+      \strng{authorfullhashraw}{010062739b88353dbaa1854f1fc572b7}
+      \strng{editorbibnamehash}{af1a2542f936ebe60de1ff1542768c99}
+      \strng{editornamehash}{21e55bdc86bab3ac7c146027e97ecf0d}
+      \strng{editorfullhash}{af1a2542f936ebe60de1ff1542768c99}
+      \strng{editorfullhashraw}{af1a2542f936ebe60de1ff1542768c99}
+      \strng{nameabibnamehash}{010062739b88353dbaa1854f1fc572b7}
+      \strng{nameanamehash}{7ac61ba1854a9de61f56dbdcbf0a88bd}
+      \strng{nameafullhash}{010062739b88353dbaa1854f1fc572b7}
+      \strng{nameafullhashraw}{010062739b88353dbaa1854f1fc572b7}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Handbook of Financial Markets: Dynamics and Evolution}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Heterogeneity, Market Mechanisms, and Asset Price Dynamics}
+      \field{usera}{J}
+      \field{userc}{english}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2009}
+      \field{dateera}{ce}
+      \field{pages}{277\bibrangedash 344}
+      \range{pages}{68}
+      \verb{doi}
+      \verb 10.1016/B978-0-444-51558-5.50013-8
+      \endverb
+      \keyw{chiarella2009}
+    \endentry
     \entry{liu2020review}{article}{}{}
       \name{author}{1}{}{%
         {{hash=19498df67822835fbf8f31ebd9f590bb}{%
