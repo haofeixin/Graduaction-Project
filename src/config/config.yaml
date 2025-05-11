@@ -1,10 +1,10 @@
 market:
-  max_timesteps: 10000
+  max_timesteps: 50000
   mode: partial_agents_per_step  # options: single_agent_per_step, partial_agents_per_step, all_agents_per_step
   activation_ratio: 0.1
   fundamental_price: 300.0
   fundamental_volatility: 0.001
-  fundamental_drift: 0.00005
+  fundamental_drift: 0.00002
 
 agents:
   fundamental_price: 300.0
@@ -15,7 +15,7 @@ agents:
   
 
   # 全局参考参数
-  reference_tau_f: 50         # 用于计算个体 tau_i
+  reference_tau_f: 100         # 用于计算个体 tau_i
   
   strategy_sigma: 0.5
 
@@ -35,7 +35,7 @@ agents:
     initial_stock_max: 5000
 
   # 网络暴力/情绪机制参数
-  emotion_initial_bias: 0.03         # 情绪偏差初始化标准差
+  emotion_initial_bias: 0.05         # 情绪偏差初始化标准差
   emotion_weight_mu: 1.0          # 情绪权重的波动性
 
 
@@ -48,10 +48,10 @@ social:
   average_degree: 6                  # 平均邻居数
 
   born_bully_ratio: 0.1              # 初始喷子比例
-  exposure_threshold: 0.05            # 曝光累积超过此值才视为被网暴
-  cooldown_duration: 3               # 喷子攻击后冷却时间
+  exposure_threshold: 0.005            # 曝光累积超过此值才视为被网暴
+  cooldown_duration: 10               # 喷子攻击后冷却时间
   resilience_growth: 0.01            # 被攻击后心理韧性的增长速度
-  exposure_shrink_factor: 0.9        # 每轮恢复压力的速度
+  exposure_shrink_factor: 0.999        # 每轮恢复压力的速度
   emotion_shrink_factor: 0.8         # 被网暴后情绪极端性减弱因子
 
   # 正反馈：网暴感染
@@ -76,5 +76,5 @@ orderbook:
 simulation:
   random_seed: 40
   log_trades: true
-  experiment_mode: single # paired_t_test / single
+  
   n_simulations: 5 # 配对t检验的次数

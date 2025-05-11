@@ -1,0 +1,51 @@
+\chapter{模型部分参数}
+\label{appendix:params}
+
+\begin{table}[h]
+    \renewcommand{\arraystretch}{1.4}
+    \centering
+    \begin{tabular}{@{}lclp{8.5cm}@{}}
+    \toprule
+    \textbf{模块} & \textbf{符号} & \textbf{默认值} & \textbf{参数说明} \\
+    \midrule
+    \multicolumn{4}{@{}l}{\textbf{市场参数}} \\
+    & \( T \) & 50000 & 最大仿真步数 \\
+    & \( \alpha \) & 0.1 & 每步激活的投资者比例 \\
+    & \( p_0^f \) & 300.0 & 初始基础价格 \\
+    & \( \sigma_f \) & 0.001 & 基础价格波动率 \\
+    & \( \mu_f \) & 0.00002 & 基础价格漂移项 \\
+    \midrule
+    \multicolumn{4}{@{}l}{\textbf{投资者参数}} \\
+    & \( N \) & 1000 & 投资者总数 \\
+    & \( \tau_f \) & 100 & 投资期参考长度 \\
+    & \( \sigma_n \) & 0.01 & 预期收益的噪声项标准差 \\
+    
+    & \( \sigma_s \) & 0.5 & 策略权重的波动程度 \\
+    & \( \eta_0 \) & 0.05 & 情绪偏差初始化标准差 \\
+    & \( \mu_e \) & 1.0 & 情绪权重对数正态分布均值 \\
+    \midrule
+    \multicolumn{4}{@{}l}{\textbf{网络暴力参数}} \\
+    & \( d \) & 6 & 社交网络平均连接度 \\
+    
+   
+    & \( \theta_x \) & 0.005 & 曝光阈值（认定被攻击） \\
+    
+    & \( \kappa \) & 0.999 & 曝光自然恢复因子 \\
+    & \( \kappa_e \) & 0.8 & 情绪极端性衰减因子 \\
+    & \( \pi_b \) & 0.05 & 网暴感染概率 \\
+   
+    & \( \pi_s \) & 0.5 & 被攻击沉默概率基线 \\
+    
+    \midrule
+    \multicolumn{4}{@{}l}{\textbf{市场反馈机制参数}} \\
+    & \( T_r \) & 100 & 监管者巡视周期 \\
+    & \( T_{rc} \) & 100 & 惩罚冷却时间 \\
+    & \( \beta_r \) & 0.1 & 举报成功概率 \\
+    & \( T_{rrc} \) & 100 & 举报惩罚冷却时间 \\
+    & \( s_{\max} \) & 0.95 & 最大沉默概率 \\
+    \bottomrule
+    \end{tabular}
+    \caption{模型核心参数与默认值}
+    \label{appendix:params}
+    \end{table}
+    

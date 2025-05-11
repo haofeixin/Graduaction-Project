@@ -5,7 +5,7 @@ from src.order.orders import Order, OrderDirection, OrderType
 class RetailTrader(BaseTrader):
     def generate_order(self, timestep: int, market_snapshot: dict) -> Order:
         if self.is_bullied and np.random.rand() < self.suppression:
-            print(f"🛑 Trader {self.trader_id} is bullied and chooses to stay silent.")
+            # print(f"🛑 Trader {self.trader_id} is bullied and chooses to stay silent.")
             return None
                 
         # 获取市场信息
@@ -42,7 +42,7 @@ class RetailTrader(BaseTrader):
 
         # 决定交易方向
         if abs(price_deviation) < 0.0005:  # 如果价格偏离小于0.05%，不交易
-            print(f"❌ Agent {self.trader_id} chose not to trade: Price deviation too small")
+            # print(f"❌ Agent {self.trader_id} chose not to trade: Price deviation too small")
             return None
 
         direction = OrderDirection.BUY if price_deviation > 0 else OrderDirection.SELL
@@ -79,7 +79,7 @@ class RetailTrader(BaseTrader):
             risk_adjusted_quantity = int(risk_adjusted_quantity * 1.2)
         quantity = min(risk_adjusted_quantity, int(self.cash / p_t))
         if quantity < 1:
-            print(f"❌ Agent {self.trader_id} chose not to trade: Calculated quantity too small")
+            # print(f"❌ Agent {self.trader_id} chose not to trade: Calculated quantity too small")
             return None
 
         # 打印决策过程

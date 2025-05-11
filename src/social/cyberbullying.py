@@ -58,7 +58,7 @@ class CyberbullyingModel:
         if not self.config["social"].get("enable_cyberbullying", False):
             return
         self.timestep += 1
-        exposure_threshold = self.config["social"].get("exposure_threshold", 0.3)
+        exposure_threshold = self.config["social"].get("exposure_threshold", 0.01)
         cooldown_duration = self.config["social"].get("cooldown_duration", 3)
         suppression_base = self.config["social"].get("suppression_prob", 0.5)
         resilience_growth = self.config["social"].get("resilience_growth", 0.01)
@@ -91,7 +91,7 @@ class CyberbullyingModel:
             # 冷却自动减1
             if hasattr(trader, "bully_cooldown"):
                 trader.bully_cooldown = max(0, trader.bully_cooldown - 1)
-            trader.exposure *= recovery_shrink
+            
 
             # 计算被攻击的强度
             attack_sum = 0
@@ -108,16 +108,18 @@ class CyberbullyingModel:
                     attack_sum += attack_strength
                     neighbor.bully_cooldown = cooldown_duration
                     neighbor.last_attack_strength = attack_strength
-                    self.attack_log.append((neighbor.trader_id, trader.trader_id, attack_strength, self.timestep))
-                    attackers.append(neighbor.trader_id)
+                    # self.attack_log.append((neighbor.trader_id, trader.trader_id, attack_strength, self.timestep))
+                    # attackers.append(neighbor.trader_id)
                     any_attack = True
-                    
+
+            # if attack_sum == 0:
+            #     trader.exposure *= recovery_shrink
+
             trader.last_been_attacked = attack_sum > 0
             trader.last_attackers = attackers
             # 累计攻击强度
             effective_exposure = attack_sum * (1.0 - trader.resilience)
             trader.exposure += effective_exposure
-
             # 受网暴影响
             if trader.exposure >= exposure_threshold:
                 if not trader.is_bullied:
@@ -145,7 +147,7 @@ class CyberbullyingModel:
             # 负反馈3：心理承受能力提升
             if enable_bully_resilience and trader.is_bullied:
                 trader.resilience = min(1.0, trader.resilience + resilience_growth)
-
+                
         # 负反馈1：监管者巡视
         if enable_regulator and self.timestep % regulator_interval == 0:
             for attacker_id, victim_id, strength, timestep in self.attack_log:
@@ -163,7 +165,7 @@ class CyberbullyingModel:
                             if attacker:
                                 attacker.bully_cooldown += regulator_report_cooldown
 
-        print(f"[Cyberbullying] Any attack: {any_attack}, Any bullied: {any_bullied}, Timestep: {self.timestep}")
+        # print(f"[Cyberbullying] Any attack: {any_attack}, Any bullied: {any_bullied}, Timestep: {self.timestep}")
 
     def export_bully_count(self, path="results/cyberbullying/网暴次数.xlsx"):
         df = pd.DataFrame(list(self.bully_count.items()), columns=["trader_id", "bully_count"])

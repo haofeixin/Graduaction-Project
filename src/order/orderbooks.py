@@ -16,7 +16,7 @@ class OrderBook:
         self.agents = agents
         
     def submit_order(self, order: Order):
-        print(f"📥 OrderBook received: {order}")
+        # print(f"📥 OrderBook received: {order}")
         if order.order_type == OrderType.MARKET:
             self._match_market_order(order)
         elif order.order_type == OrderType.LIMIT:
@@ -40,7 +40,7 @@ class OrderBook:
             trade_price = self.best_bid()  # 卖单需要匹配买单的最优价格
 
         if trade_price is None:
-            print("No matching market price found, cannot execute the order")
+            # print("No matching market price found, cannot execute the order")
             return
         
         _, _, top_order = book[0]
@@ -67,7 +67,7 @@ class OrderBook:
                     'trade_qty': trade_qty
                 }
                 self.trade_log.append(trade_info)
-                print(f"💥 TRADE: {order.order_id} <-> {top_order.order_id} at price={trade_price} qty={trade_qty}")
+                # print(f"💥 TRADE: {order.order_id} <-> {top_order.order_id} at price={trade_price} qty={trade_qty}")
                 remaining_quantity -= trade_qty
 
                 # 如果卖单部分成交，说明order成交完全,剩余部分继续在订单簿中
@@ -88,7 +88,7 @@ class OrderBook:
                 max_wait_time=order.max_wait_time
             )
             self.submit_order(limit_order)
-            print(f"Remaining part of the market order converted to limit order at price {order.price}")
+            # print(f"Remaining part of the market order converted to limit order at price {order.price}")
 
     def _priority(self, order: Order) -> float:
         if order.price is None:
@@ -132,13 +132,13 @@ class OrderBook:
             _, _, order = entry
             if order.check_timeout(current_timestamp):  # 使用时间步来检查超时
                 self.buys.remove(entry)  # 从买单簿中移除超时订单
-                print(f"Order {order.order_id} has been cancelled due to timeout.")
+                # print(f"Order {order.order_id} has been cancelled due to timeout.")
 
         for entry in self.sells[:]:
             _, _, order = entry
             if order.check_timeout(current_timestamp):  # 使用时间步来检查超时
                 self.sells.remove(entry)  # 从卖单簿中移除超时订单
-                print(f"Order {order.order_id} has been cancelled due to timeout.")
+                # print(f"Order {order.order_id} has been cancelled due to timeout.")
 
     def get_latest_trades(self) -> list:
         """获取最新的成交信息"""

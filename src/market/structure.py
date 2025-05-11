@@ -62,12 +62,12 @@ class Market:
     def step(self):
         self.orderbook.current_timestep = self.current_time
         self.orderbook.cancel_timed_out_orders(self.current_time)
-        print(f"\n--- Time Step {self.current_time} ---")
-        print(f"📊 Market Snapshot:")
-        print(f"  - Best Bid: {self.orderbook.best_bid()}")
-        print(f"  - Best Ask: {self.orderbook.best_ask()}")
-        print(f"  - Last Price: {self.price_history[-1] if self.price_history else 'N/A'}")
-        print(f"  - Fundamental: {self.fundamental_price:.2f}")
+        # print(f"\n--- Time Step {self.current_time} ---")
+        # print(f"📊 Market Snapshot:")
+        # print(f"  - Best Bid: {self.orderbook.best_bid()}")
+        # print(f"  - Best Ask: {self.orderbook.best_ask()}")
+        # print(f"  - Last Price: {self.price_history[-1] if self.price_history else 'N/A'}")
+        # print(f"  - Fundamental: {self.fundamental_price:.2f}")
 
         Z = np.random.normal(0, 1)
         # 股票基础价格遵循带正漂移项的几何布朗运动
@@ -106,11 +106,11 @@ class Market:
 
     def _process_agent(self, agent, market_snapshot):
         market_snapshot = self._build_market_snapshot()
-        print(f"\n🧠 Trader {agent.trader_id} deciding to trade...")
+        # print(f"\n🧠 Trader {agent.trader_id} deciding to trade...")
 
         order = agent.generate_order(self.current_time, market_snapshot)
         if order:
-            print(f"✅ Trader {agent.trader_id} submits order: {order}")
+            # print(f"✅ Trader {agent.trader_id} submits order: {order}")
             # 记录当前成交日志长度
             trade_log_length_before = len(self.orderbook.trade_log)
             # 提交订单
@@ -144,9 +144,9 @@ class Market:
                 seller.cash = max(seller.cash, 0)
                 seller.stock = max(seller.stock, 0)
                 
-                print(f"💰 Asset update after trade:")
-                print(f"  - Buyer {buyer.trader_id}: cash={buyer.cash:.2f}, stock={buyer.stock:.2f}")
-                print(f"  - Seller {seller.trader_id}: cash={seller.cash:.2f}, stock={seller.stock:.2f}")
+                # print(f"💰 Asset update after trade:")
+                # print(f"  - Buyer {buyer.trader_id}: cash={buyer.cash:.2f}, stock={buyer.stock:.2f}")
+                # print(f"  - Seller {seller.trader_id}: cash={seller.cash:.2f}, stock={seller.stock:.2f}")
 
     def run(self):
         for _ in range(self.max_timesteps):

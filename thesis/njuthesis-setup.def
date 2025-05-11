@@ -26,11 +26,11 @@
     % 作者英文姓名
     % 一般使用拼音
     %
-    keywords = {网络暴力, 行为金融, 人工股票市场, 市场微观结构},
+    keywords = {Agent-Based建模,人工股票市场,网络暴力,行为金融,市场效率},
     % 中文关键词列表
     % 使用英文半角逗号(,)分隔
     %
-    keywords* = {Cyberbulling, Behaviour Finance, ABM, Market Microstructure},
+    keywords* = {Agent-Based Modeling,Artificial Stock Market,Cyberbullying,Behaviour Finance,Market Efficiency},
     % 英文关键词
     % 使用英文半角逗号(,)分隔
     %
@@ -58,8 +58,8 @@
     % 导师全称
     % 使用英文半角逗号(,)分隔中文姓名和职称
     %
-    supervisor-ii = {孙旭初, 助理研究员},
-    supervisor-ii* = {Sun Xuchu, Researcher},
+    % supervisor-ii = {孙旭初, 助理研究员},
+    % supervisor-ii* = {Sun Xuchu, Researcher},
     % 第二导师全称
     % 如果确实没有第二导师，不填写即可
     %
@@ -142,11 +142,11 @@
         % 使用仅首字母大写的姓名
         % refsection = chapter,
         % 将参考文献表置于每章后
-        sorting = nyt,
+        % sorting = nyt,
         % 按姓名、年份、标题排序
         labelnumber = true,
         % 启用编号
-        defernumbers = true
+        % defernumbers = false
         % 延迟编号，确保编号连续
     }
     % 额外的 biblatex 宏包选项
@@ -185,9 +185,9 @@
 
 % 目录自身是否显示在目录条目中
 \njusetup{
-    % tableofcontents/toc-entry = false,
-    % listoffigures/toc-entry   = false,
-    % listoftables/toc-entry    = false
+    tableofcontents/toc-entry = true,
+    listoffigures/toc-entry   = true,
+    listoftables/toc-entry    = true,
 }
 
 % 为目录中的章标题添加引导线

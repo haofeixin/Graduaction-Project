@@ -168,7 +168,7 @@
 \subsection{价格预期与交易意愿}
 \label{subsec:price expectation}
 
-投资者进入市场时，会基于当前市场状态构造未来一个投资期 \(\tau^i\) 内的价格预期，并据此计算预期收益率。参照\textcite{chiarella2009}的做法，所有投资者的预期收益率均由三类成分组成：基本面驱动、趋势跟随以及随机噪声：
+投资者进入市场时，会基于当前市场状态构造未来一个投资期 \(\tau^i\) 内的价格预期，并据此计算预期收益率。参照\textcite{chiarella2009impact}的做法，所有投资者的预期收益率均由三类成分组成：基本面驱动、趋势跟随以及随机噪声：
 
 \begin{equation}
     \hat{r}_{t,t+\tau^i}^i = 
@@ -211,7 +211,7 @@
     
 
 上述参数的均值 \(\mu_k\) 根据交易者类型（散户或机构）分别设置，标准差 \(\sigma\) 为共享值。
-与\textcite{chiarella2009}采用的指数分布不同，对数正态分布在本模型中更能表达多数权重集中于中低值、少数极端行为交易者存在的长尾结构。这种设定有助于捕捉市场中“沉默多数”与“极端交易者”共存的现象，从而增强模拟系统的真实感。
+与\textcite{chiarella2009impact}采用的指数分布不同，对数正态分布在本模型中更能表达多数权重集中于中低值、少数极端行为交易者存在的长尾结构。这种设定有助于捕捉市场中“沉默多数”与“极端交易者”共存的现象，从而增强模拟系统的真实感。
 
 
 
@@ -253,9 +253,10 @@
 订单类型判断规则详见表~\ref{tab:order_decision}，其中列出了不同市场价格区间下的交易方向与订单类型对应关系。无论是散户还是机构，订单类型判断逻辑是一致的，只是其期望价格的形成路径和风险容忍度存在差异。
 
 \begin{table}[htbp]
-    \renewcommand{\arraystretch}{1.5} % 行距调整
+    \renewcommand{\arraystretch}{1.5}
     \centering
     \large
+    \begin{threeparttable}
     \begin{tabular}{@{} >{\centering\arraybackslash}p{5.5cm} 
                     >{\centering\arraybackslash}p{3.5cm} 
                     >{\centering\arraybackslash}p{5.5cm} @{}}
@@ -270,15 +271,17 @@
     \bottomrule\bottomrule
     \end{tabular}
     
-    \vspace{1.2em}
+    \vspace{1em}
     
-    \caption{
-    投资者订单类型判断规则。
-    其中 \( p^* \) 为根据公式~\ref{eq:expected_price} 计算的预期价格；\( p_m = 0.9p_t \)、\( p_M = 1.1p_t \) 为允许报价边界；\( a_t^q \)、\( b_t^q \) 分别为当前最优卖价与买价。
-    }
+    \begin{tablenotes}
+    \item[] 注：\( p^* \) 为根据公式~\ref{eq:expected_price} 计算的预期价格；\( p_m = 0.9p_t \)、\( p_M = 1.1p_t \) 为允许报价边界；\( a_t^q \)、\( b_t^q \) 分别为当前最优卖价与买价。
+    \end{tablenotes}
+    
+    \caption{投资者订单类型判断规则}
     \label{tab:order_decision}
+    \end{threeparttable}
     \end{table}
-
+    
 最终，投资者生成的订单包括以下内容：方向（买入/卖出）、数量、价格、订单类型，以及最长期等待时间（在模型中设定为常数或从某一分布中采样），并提交至订单簿，等待成交。
 
 

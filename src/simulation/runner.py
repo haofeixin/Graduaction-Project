@@ -1,16 +1,14 @@
-from src.analysis.experiments import run_single_experiment, run_paired_t_test
-from src.config.loader import load_config
+import matplotlib
+matplotlib.rcParams['font.sans-serif'] = ['SimHei', 'STHeiti', 'Arial Unicode MS']
+matplotlib.rcParams['axes.unicode_minus'] = False
+
+from src.analysis.market_mechanism import runner_4_1
+from src.analysis.wealth_effect import runner_4_2
+from src.analysis.market_efficiency import runner_4_3
+import warnings
+warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
-    
-    
-    config = load_config("config.yaml")
-    experiment_mode = config.get("simulation", {}).get("experiment_mode", "single")
-    
-    if experiment_mode == "single":
-        run_single_experiment()
-    else:
-        n_simulations = config.get("simulation", {}).get("n_simulations", 1000)
-        run_paired_t_test(n_simulations)
-       
-
+    # runner_4_1()
+    # runner_4_2()
+    runner_4_3()

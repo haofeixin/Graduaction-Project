@@ -59,6 +59,7 @@
 \usepackage{caption}    % for adjusting table captions
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{threeparttable}
 % \usepackage{siunitx} % 标准单位符号
 % \usepackage{physics} % 物理百宝箱
 % \usepackage[version=4]{mhchem} % 绘制分子式
@@ -85,19 +86,27 @@
 \raggedbottom
 
 \begin{abstract}
-  中文摘要
+随着社交媒体在投资者行为中的影响日益增强，网络暴力作为一种极端负面情绪表达方式，其对金融市场系统性风险的潜在影响值得深入探讨。本文基于 Agent-Based 建模方法，构建融合社交传播机制与行为金融模型的人工股票市场系统，模拟网络暴力在社交网络中的扩散如何影响投资者行为决策，并进一步扰动市场价格与财富分布结构。
+模型中引入攻击者、受害者与旁观者角色，通过攻击传播、情绪感染与行为反馈构建“情绪—行为—市场”闭环机制。市场结构采用连续双边报价（CDA）机制，投资者基于多维信号进行交易决策，网络暴力对其情绪偏差与参与概率产生动态干预。
+通过多组仿真实验，本文系统分析了网络暴力机制对个体行为路径、群体财富演化以及市场效率的扰动效应。结果显示：网络暴力显著降低了散户交易活跃度与终期财富水平，造成群体内财富差距扩大；同时加剧了价格波动、提高了交易摩擦成本，并削弱了市场价格发现能力。
+本文研究为理解社交媒体情绪传播如何通过行为反馈机制传导至市场系统提供了建模框架，也为未来建立金融情绪监管预警机制提供理论依据。
+
 \end{abstract}
 
 \begin{abstract*}
-  English abstract
+As social media increasingly shapes investor sentiment and decision-making, cyberbullying—an extreme form of negative emotional expression—has emerged as a potential source of systemic risk in financial markets. This study develops an Agent-Based artificial stock market model that integrates a social contagion mechanism to examine how the diffusion of cyberbullying through investor networks impacts individual trading behavior and, ultimately, market dynamics.
+The model incorporates roles such as attackers, victims, and bystanders, and simulates a feedback loop among emotional contagion, behavioral responses, and market outcomes. A continuous double auction (CDA) mechanism governs market transactions, where heterogeneous agents make trading decisions based on fundamental, technical, and noise signals. The propagation of cyberbullying alters their emotional bias and participation probability over time.
+Through a series of Monte Carlo simulations, the study quantitatively assesses the impact of cyberbullying on trading frequency, wealth distribution, price volatility, market liquidity, and informational efficiency. Results show that cyberbullying significantly reduces retail investor participation and terminal wealth, widens intra-group wealth inequality, increases market volatility, raises transaction costs, and weakens the market's ability to reflect fundamental values.
+This research provides a novel framework for modeling the behavioral transmission of extreme social emotions into market-level disruptions and offers theoretical insights for future design of financial emotion monitoring and regulatory mechanisms.
+
 \end{abstract*}
 
 % 生成目录
 \tableofcontents
 % 生成图片清单
-% \listoffigures
+\listoffigures
 % 生成表格清单
-% \listoftables
+\listoftables
 
 %---------------------------------------------------------------------
 %	正文部分
@@ -139,7 +148,20 @@
 %---------------------------------------------------------------------
 
 \begin{acknowledgement}
-  感谢 \href{https://git.nju.edu.cn/nju-lug/lug-introduction}{LUG@NJU}。
+  
+  
+时光荏苒，转眼已至本科学业的尾声。四年前的盛夏，我有幸进入南京大学工程管理学院计算机金融工程实验班，开始了这段融合技术与金融、理论与实践的学习旅程。在这里，我不仅拓展了视野、锤炼了能力，也逐渐明确了自己的未来方向
+
+首先，我要衷心感谢我的论文指导老师李心丹老师和孙旭初老师。在选题讨论、模型设计、实验调参乃至论文撰写的每一个阶段，老师都给予了我悉心的指导与启发。在我思路迷茫、表达混乱时，老师总能以严谨的逻辑与宽容的态度，引导我重新理清问题。感谢老师不仅教会我如何“写一篇论文”，更让我体会到科研训练背后严谨求实的精神。
+
+感谢工程管理学院和其他院系给我上过课的各位老师四年来在课程教学、项目指导与学业支持方面给予的帮助。黄卫华老师的幽默口音，许慨老师“地狱难度”的口语表达作业，陈莹老师课上的企业模拟实训，肖斌卿老师的“放电影”环节，都是琉璃般的时间碎片值得珍存。
+
+感谢我的家人，是你们始终无条件地支持我所有的决定，无论是专业选择、职业规划还是论文方向。你们的理解、信任与陪伴，是我不断前行的底气与动力。
+
+也要感谢身边的朋友与同学，在我论文写作过程中提供了各种帮助与陪伴。每一次夜深时的调试、每一次讨论后的顿悟，都是这段旅程中珍贵的记忆。
+
+最后，愿我不负这段本科生涯的成长与磨炼，不负南大“诚朴雄伟，励学敦行”的精神，以理性与温度面对未来的挑战，在真实世界中继续建构属于自己的解法。
+  
 \end{acknowledgement}
 
 %---------------------------------------------------------------------
@@ -158,9 +180,9 @@
 \appendix
 
 % 可以在这里插入补充材料
-\chapter{正文中涉及的数据及源代码}
-\include{chapters/chap6_appendix}
-\dots
+
+\include{chapters/appendix}
+
 
 % 完工
 \end{document}
