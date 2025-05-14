@@ -58,8 +58,8 @@
     % 导师全称
     % 使用英文半角逗号(,)分隔中文姓名和职称
     %
-    % supervisor-ii = {孙旭初, 助理研究员},
-    % supervisor-ii* = {Sun Xuchu, Researcher},
+    supervisor-ii = {孙煦初, 助理研究员},
+    supervisor-ii* = {Sun Xuchu, Research Associate},
     % 第二导师全称
     % 如果确实没有第二导师，不填写即可
     %
@@ -126,7 +126,7 @@
 
 % bib 类用于参考文献设置
 \njusetup[bib]{
-    style = numeric,
+    style = author-year,
     % 参考文献样式
     % 默认为顺序编码制（numeric）
     % 可选著者-出版年制（author-year）
