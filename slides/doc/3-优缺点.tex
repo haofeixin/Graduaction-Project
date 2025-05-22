@@ -1,0 +1,73 @@
+
+\begin{frame}{目录}
+        \begin{center}
+            \textcolor{NJU_purple}{\Large 第三部分} \\
+            \text{\;} \\
+            \textcolor{NJU_purple}{\Huge GRU的应用} 
+        \end{center}      
+    \end{frame}
+
+\begin{frame}{GRU的应用场景}
+    \begin{itemize}
+        \item 自然语言处理（NLP）
+        \begin{itemize}
+            \item 机器翻译：捕捉源语言和目标语言的上下文依赖（如Google的早期翻译模型）。
+            \item 文本生成：生成连贯的对话或文章（如聊天机器人、自动摘要）。
+            \item 情感分析：分析长文本中的情感倾向。
+        \end{itemize}
+        \item 时间序列预测
+        \begin{itemize}
+            \item 股票价格预测：基于历史价格序列预测未来趋势。
+            \item 气象预测：处理时间相关的气象数据（如温度、湿度序列）。
+        \end{itemize}
+        \item 语音识别
+        \begin{itemize}
+            \item 声学建模：将语音信号映射为文本序列，捕捉语音中的时序特征。
+        \end{itemize}
+        \item 推荐系统
+        \begin{itemize}
+            \item 用户行为建模：根据用户历史行为序列（点击、购买记录）预测兴趣。
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{GRU的优缺点}
+    \begin{itemize}
+        \item 优势：
+        \begin{itemize}
+            \item 简洁高效：GRU的结构相对简单，参数较少，训练速度快。
+            \item 解决梯度问题：通过引入门机制，GRU有效地解决了传统RNN中的梯度消失和爆炸问题，从而能够更好地捕捉序列数据中的长期依赖关系。
+            \item 适应性强：可以用于处理各种类型的序列数据，包括文本、音频、图像等。
+        \end{itemize}
+        \item 限制：
+        \begin{itemize}
+            \item 对于非常长的序列，GRU可能无法完全捕捉所有的长期依赖关系。因为尽管门机制帮助控制信息的传递，但在非常长的序列中信息的传递仍会受到一定的限制。
+            \item GRU难以显式建模序列中的层次结构。如，在自然语言处理任务中，词语的含义可能取决于它在句子中的位置，而句子的含义可能取决于它在段落中的位置。这种层次结构是GRU难以处理的。
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{LSTM VS GRU}
+\begin{table}[!htbp]
+	\centering
+    \resizebox{1.0\textwidth}{!}{
+	\begin{tabular}{|c|c|c|}
+		\hline
+		对比维度   & LSTM               & GRU                \\ \hline
+		门控机制   & 3个门：输入门、遗忘门、输出门    & 2个门：更新门、重置门        \\ \hline
+		记忆单元   & 独立细胞状态（Cell State） & 无独立细胞状态，通过更新门和重置门联合控制    \\ \hline
+		参数量    & 较多（多一个门控和细胞状态）     & 较少（参数更精简）          \\ \hline
+		计算复杂度  & 较高（需维护细胞状态）        & 较低（合并门控和状态）        \\ \hline
+		训练速度   & 较慢（参数多）            & 较快（参数少）            \\ \hline
+		长依赖捕捉  & 更强（显式控制记忆遗忘）       & 稍弱（隐式记忆更新）         \\ \hline
+		适用场景   & 超长序列、复杂时序依赖（如机器翻译） & 中等序列、实时性要求高（如语音识别） \\ \hline
+		梯度消失问题 & 缓解（通过细胞状态）         & 缓解（通过更新门）          \\ \hline
+		主流框架实现 & 广泛支持               & 广泛支持               \\ \hline
+	\end{tabular}}
+	\caption{GRU和LSTM对比}
+	\label{tab:my-table}
+\end{table}
+\end{frame}
+
