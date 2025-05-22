@@ -1,20 +1,4 @@
-
-\usepackage{fontspec}
-
-
-% 避免重复定义 songti
-\ifdefined\songti\relax\else
-  \IfFontExistsTF{SimSun}
-    {
-      \setmainfont{SimSun}
-      \newfontfamily\songti{SimSun}
-    }
-    {
-      \setmainfont{Arial}
-      \newfontfamily\songti{Arial}
-    }
-\fi
-\linespread{1.5}                        %   调节行距倍数 1.5 倍
+\linespread{1.2}                        %   调节行距倍数 1.2 倍
 \usepackage{ragged2e}                   %   完美对齐命令 \justifying 
 \usepackage{lipsum}                     %   English Lorem ipsum
 \usepackage{zhlipsum}                   %   Chinese Lorem ipsum
@@ -117,24 +101,32 @@
 % overleaf 支持的中文字体
 % https://cn.overleaf.com/learn/latex/Questions/Which_OTF_or_TTF_fonts_are_supported_via_fontspec%3F#Chinese
 
-\usefonttheme{serif}
-\usefonttheme{professionalfonts}
-\usepackage[fontset=ubuntu]{ctex} 
-\usepackage[T1, TU]{fontenc}
-\usepackage{fontspec}
+% 使用 XeLaTeX 编译
 \usepackage{xeCJK}
+\usepackage{fontspec}
 
+% 设置英文字体（macOS 自带字体）
+\setmainfont{Times New Roman}          % 正文西文
+\setsansfont{Helvetica Neue}           % 无衬线西文
+\setmonofont{Menlo}                    % 等宽字体
 
-\setmainfont{CMU Serif}
-\setsansfont{CMU Sans Serif}
-\setmonofont{Courier New}
-\setCJKmainfont[BoldFont={FandolHei}, ItalicFont={FandolKai}]{FandolSong}
+% 设置中文字体（macOS 自带中文字体）
+\setCJKmainfont[
+  BoldFont = {Heiti SC},
+  ItalicFont = {Songti SC}
+]{Songti SC}
+
+% 定义中文字体宏（用于 beamer 设置中）
+\newcommand{\songti}{\CJKfamily{song}}  % 会默认使用 PingFang，但你也可以替换
+\newcommand{\kaishu}{\CJKfamily{kai}}  % 楷体（如果用不到可省略）
+
+% 设置 beamer 字体
 \setbeamerfont{title}{family=\kaishu, series=\bfseries, size=\large}
-\setbeamerfont{subtitle}{family=\songti, series=\bfseries, size={\fontsize{24}{0}}}
+\setbeamerfont{subtitle}{family=\songti, series=\bfseries, size={\fontsize{24}{28}\selectfont}}
 \setbeamerfont{author}{family=\songti, series=\bfseries, size=\large}
 \setbeamerfont{institute}{family=\songti, series=\bfseries, size=\normalsize}
 \setbeamerfont{date}{family=\songti, series=\bfseries, size=\normalsize}
-\setbeamerfont{frametitle}{family=\songti, series=\bfseries, size={\fontsize{14}{0}}}
+\setbeamerfont{frametitle}{family=\songti, series=\bfseries, size={\fontsize{14}{16}\selectfont}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
